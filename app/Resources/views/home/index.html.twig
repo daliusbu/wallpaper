@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <div class="row">
+        {% for image in randomized_images %}
+        <div class="col-sm-6 col-md-3">
+            <div class="thumbnail">
+                <img src="/images/{{ image }}" alt="...">
+            </div>
+        </div>
+        {% nedfor %}
+
+    </div>
+
+{% endblock %}
