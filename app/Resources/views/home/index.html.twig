@@ -3,13 +3,29 @@
 {% block body %}
 
     <div class="row">
+        <h3>Top wallpapers for Abstract</h3>
+        {% include 'home/best-in-category.html.twig' with {'images':abstract_images} %}
+    </div>
+
+    <div class="row">
+        <h3>Top wallpapers for Summer</h3>
+        {% include 'home/best-in-category.html.twig' with {'images':summer_images} %}
+    </div>
+
+    <div class="row">
+        <h3>Top wallpapers for Winter</h3>
+        {% include 'home/best-in-category.html.twig' with {'images':winter_images} %}
+    </div>
+
+    <h3>Random wallpapers</h3>
+    <div class="row">
         {% for image in randomized_images %}
-        <div class="col-sm-6 col-md-3">
-            <div class="thumbnail">
-                <img src="/images/{{ image }}" alt="...">
+            <div class="col-sm-6 col-md-3">
+                <div class="thumbnail">
+                    <img src="/images/{{ image }}" alt="...">
+                </div>
             </div>
-        </div>
-        {% nedfor %}
+        {% endfor %}
 
     </div>
 

@@ -9,7 +9,24 @@
 namespace AppBundle\Controller;
 
 
-class DetailController
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Routing\Annotation\Route;
+
+class DetailController extends Controller
 {
+
+    /**
+     * @Route("/view", name="view")
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function indexAction()
+    {
+
+        $image = 'abstract-black-and-white-wave.jpg';
+
+        return $this->render('detail/index.html.twig', [
+            'image'=>$image,
+        ]);
+    }
 
 }
