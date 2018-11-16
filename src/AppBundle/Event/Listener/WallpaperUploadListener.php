@@ -48,6 +48,16 @@ class WallpaperUploadListener
         // - Move the uploaded file
         $this->fileMover->move($temporaryLocation, $newFileLocation);
 
+        //todo:
+        // set additional parameters of the entity
+        $width = getimagesize($newFileLocation)[0];
+        $height = getimagesize($newFileLocation)[1];
+
+        $entity
+            ->setFilename($file->getClientOriginalName())
+            ->setWidth($width)
+            ->setHeight($height)
+        ;
 
 
 ;
