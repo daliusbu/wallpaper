@@ -2,6 +2,7 @@
 
 namespace AppBundle\Event\Listener;
 
+use AppBundle\Entity\Wallpaper;
 use AppBundle\Service\FileMover;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
@@ -22,6 +23,14 @@ class WallpaperUploadListener
 
     public function prePersist(LifecycleEventArgs $eventArgs)
     {
+        // if not wallpaper entity - return early
+
+        if (false === $eventArgs->getEntity() instanceof Wallpaper){
+            return false;
+        }
+
+//        $this->fileMover->move()
+
         return true;
     }
 
