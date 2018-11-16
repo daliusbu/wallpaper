@@ -1,26 +1,14 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: dalius
+ * Date: 18.11.16
+ * Time: 07.59
+ */
 
 namespace AppBundle\Service;
 
-use Symfony\Component\Filesystem\Filesystem;
-
-class FileMover
+interface FileMover
 {
-
-    /**
-     * @var Filesystem
-     */
-    private $filesystem;
-
-    public function __construct(Filesystem $filesystem)
-    {
-        $this->filesystem = $filesystem;
-    }
-
-
-    public function move($fromLocation, $toLocation)
-    {
-        $this->filesystem->rename( $fromLocation, $toLocation);
-        return true;
-    }
+    public function move($fromLocation, $toLocation);
 }
