@@ -14,7 +14,7 @@ easy_admin:
           - { property: "image", type: "image", base_path: "/images/" }
       form:
         fields:
-          - { property: "file", type: "file", label: "Pick a file:" }
+          - { property: "file", type: 'AppBundle\Form\Type\UploadedFileType', label: "Pick a file:" }
           - "slug"
           - "width"
           - "height"

@@ -6,21 +6,24 @@ use AppBundle\Entity\Category;
 use AppBundle\Entity\Wallpaper;
 use AppBundle\Event\Listener\WallpaperUploadListener;
 use AppBundle\Service\FileMover;
+use AppBundle\Model\FileInterface;
+use AppBundle\Service\WallpaperFilePathHelper;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Mapping\PrePersist;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class WallpaperUploadListenerSpec extends ObjectBehavior
 {
     private $fileMover;
+    private $wallpaperFilePathHelper;
 
-    function let(FileMover $fileMover){
-        $this->beConstructedWith($fileMover);
+    function let(FileMover $fileMover, WallpaperFilePathHelper $wallpaperFilePathHelper){
+        $this->beConstructedWith($fileMover, $wallpaperFilePathHelper);
 
         $this->fileMover = $fileMover;
+        $this->wallpaperFilePathHelper = $wallpaperFilePathHelper;
     }
 
 
@@ -44,24 +47,32 @@ class WallpaperUploadListenerSpec extends ObjectBehavior
 
 
 
-
-
     function it_can_prePersist(
-        LifecycleEventArgs $eventArgs
+        LifecycleEventArgs $eventArgs,
+        FileInterface $file
     ){
 
         $fakeTemp = "/fake/temp/path/";
-        $fakeDestination= "/fake/destination/path";
+        $fakeFilename= "fake.file";
 
-        $uploadedFile = new UploadedFile($fakeTemp, 'some.file');
-        $uploadedFile->getPathname()->willReturn($fakeTemp);
+        $file->getPathname()->willReturn($fakeTemp);
+        $file->getFilename()->willReturn($fakeFilename);
+
+
+;
         $wallpaper = new Wallpaper();
-        $wallpaper->setFile($uploadedFile);
+        $wallpaper->setFile($file->getWrappedObject());
         $eventArgs->getEntity()->willReturn($wallpaper);
 
-        $this->prePersist($eventArgs);
+        $fakeNewFileLocation = 'some/new/fake' . $fakeFilename;
+        $this
+            ->wallpaperFilePathHelper
+            ->getNewFilePath($fakeFilename)
+            ->willReturn($fakeNewFileLocation);
 
-        $this->fileMover->move($fakeTemp, $fakeDestination)->shouldHaveBeenCalled();
+        $this->prePersist($eventArgs)->shouldReturn(true);
+
+        $this->fileMover->move($fakeTemp, $fakeNewFileLocation)->shouldHaveBeenCalled();
 
 
     }
