@@ -11,6 +11,7 @@ use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Mapping\PrePersist;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class WallpaperUploadListenerSpec extends ObjectBehavior
 {
@@ -45,10 +46,18 @@ class WallpaperUploadListenerSpec extends ObjectBehavior
 
 
 
-    function it_can_prePersist(LifecycleEventArgs $eventArgs){
+    function it_can_prePersist(
+        LifecycleEventArgs $eventArgs
+    ){
 
-        $fakeTemp = "/fake/temp/path";
+        $fakeTemp = "/fake/temp/path/";
         $fakeDestination= "/fake/destination/path";
+
+        $uploadedFile = new UploadedFile($fakeTemp, 'some.file');
+        $uploadedFile->getPathname()->willReturn($fakeTemp);
+        $wallpaper = new Wallpaper();
+        $wallpaper->setFile($uploadedFile);
+        $eventArgs->getEntity()->willReturn($wallpaper);
 
         $this->prePersist($eventArgs);
 
