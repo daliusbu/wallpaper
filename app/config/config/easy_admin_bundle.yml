@@ -16,5 +16,4 @@ easy_admin:
         fields:
           - { property: "file", type: 'AppBundle\Form\Type\UploadedFileType', label: "Pick a file:" }
           - "slug"
-          - "width"
-          - "height"
+

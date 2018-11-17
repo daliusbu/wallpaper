@@ -42,7 +42,7 @@ services:
         tags:
         - { name: console.command }
 
-    app.service.file_mover:
+    app.service.local_filesystem_file_mover:
         class: AppBundle\Service\FileMover
         arguments:
             - '@filesystem'
@@ -51,3 +51,15 @@ services:
         class: AppBundle\Service\WallpaperFilePathHelper
         arguments:
             - "%kernel.project_dir%/web/images"
+
+    app.service.image_file_dimensions_helper:
+        class: AppBundle\Service\ImageFileDimensionsHelper
+
+    app.doctrine_event_listener.wallpaper_upload_listener:
+        class: AppBundle\Event\Listener\WallpaperUploadListener
+        arguments:
+            - "@app.service.local_filesystem_file_mover"
+            - "@app.service.wallpaper_file_path_helper"
+            - "@app.service.image_file_dimensions_helper"
+        tags:
+           - {name: doctrine.event_listener, event: prePersist }
